@@ -143,8 +143,8 @@ function App() {
               { advanced ? 
                 <div className="plus">
                   <img
-                    height={40}
-                    width={40}
+                    height={30}
+                    width={30}
                     alt={""}
                     src={require('./assets/plus.png')}
                     onClick={toggleAdvanced}
