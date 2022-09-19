@@ -7,7 +7,7 @@ function App() {
   // state variables
   const [search, setSearch] = useState("");
   const [tableData, setTableData] = useState([]);
-  const [numGuesses, setNumGuesses] = useState(1);
+  const [numGuesses, setNumGuesses] = useState(0);
   const [lastGuess, setLastGuess] = useState({});
   // const [tableData, setTableData] = useCookies([]);
   const [filteredData, setFilteredData] = useState([]);
@@ -24,9 +24,10 @@ function App() {
     setSearch(searchWord);
     const newFiltered = GodData.filter((value) => {
       return (value.name.toLowerCase().includes(searchWord.toLowerCase()) &&
-              tableData.findIndex(g => g.gid === value.gid) === -1  &&
+              tableData.findIndex(g => g.gid === value.gid) === -1 &&
               value.gid !== lastGuess.gid ) ||
-             (advanced && tableData.findIndex(g => g.gid === value.gid) === -1 && (
+             (advanced && tableData.findIndex(g => g.gid === value.gid) === -1 &&
+              value.gid !== lastGuess.gid && (
               value.name.toLowerCase().includes(searchWord.toLowerCase()) ||
               value.gender.toLowerCase().includes(searchWord.toLowerCase()) ||
               value.pantheon.toLowerCase().includes(searchWord.toLowerCase()) ||
@@ -54,18 +55,7 @@ function App() {
       setLastGuess(guess);
     }
     // if (guess === pickedGod) setGameWon(true, {path: "/"});
-    if (guess === pickedGod) {
-      // const name = pickedGod.name;
-
-      // Axios({
-      //   method: 'POST',
-      //   headers: {'Content-Type': 'application/json'},
-      //   url: 'http://192.168.2.16:80/smle_api/capture.php',
-      //   data: {numGuesses, name}
-      // });//.then((response) => { console.log(response) });
-      
-      setGameWon(true);
-    }
+    if (guess === pickedGod) setGameWon(true);
   }
 
   const newGame = () => {
@@ -74,7 +64,7 @@ function App() {
     // setTableData([], {path: "/"});
     setTableData([]);
     setLastGuess({});
-    setNumGuesses(1);
+    setNumGuesses(0);
     setSearch("");
     // setGameWon(gameWon, false, {path: "/"});
     setAdvanced(false);
@@ -105,82 +95,82 @@ function App() {
         <h1>
           Welcome to SMITEle!<br/>
           {gameWon ? 'You can guess the God!' : 'Can you guess the God?'}
-        </h1> 
-        {/* search bar is where the api call would go to replace local GodData*/}
-        {/*<SearchBar placeholder="Type a Gods name..." data={GodData} func={addGuess}/>*/}
+        </h1>
+        <h2> {gameWon ? '...in '+numGuesses+' guesses.' : ''} </h2>
         { gameWon ?
-        <div className="winCard">
-          <img
-            height={500}
-            width={350}
-            alt={""}
-            src={require('./assets/cards/'+pickedGod.name.toLowerCase().replace(/\s/g, "")+'.png')}
-          />
-          <div className="replay" onClick={newGame}>Play Again</div>
-        </div> :
-        <div className='search'>
-          <div className='searchRow'>
-            <div className='searchInputs'>
-              <input type='text' placeholder={"Type a Gods name..."} value={search} onChange={handleFilter}/>
-            </div>
-            <div className='toolTip'>
-              { numGuesses > 5 ?
-                <img
-                  className={"advanced-active"}
-                  height={69}
-                  width={80}
-                  alt={""}
-                  src={require('./assets/advanced.png')}
-                  onClick={toggleAdvanced}
-                /> :
-                <img
-                  height={69}
-                  width={80}
-                  alt={""}
-                  src={require('./assets/disadvanced.png')}
-                /> 
-              }
-              { advanced ? 
-                <div className="plus">
+          <div className="winCard">
+            <img
+              height={500}
+              width={350}
+              alt={""}
+              src={require('./assets/cards/'+pickedGod.name.toLowerCase().replace(/\s/g, "")+'.png')}
+            />
+            <div className="replay" onClick={newGame}>Play Again</div>
+          </div> :
+          <div className='search'>
+            <div className='searchRow'>
+              <div className='searchInputs'>
+                <input type='text' placeholder={"Type a Gods name..."} value={search} onChange={handleFilter}/>
+              </div>
+              <div className='toolTip'>
+                { numGuesses >= 5 ?
                   <img
-                    height={30}
-                    width={30}
+                    className={"advanced-active"}
+                    height={69}
+                    width={80}
                     alt={""}
-                    src={require('./assets/plus.png')}
+                    src={require('./assets/advanced.png')}
                     onClick={toggleAdvanced}
-                  />
-                </div> :
-                <div className="plus"/>
-              }
-              <div className='toolTipText'>
-                <div className='toolTipTitle'>
-                  Advanced Search
-                </div>
-                <div className='toolTipSmall'>
-                  { numGuesses < 6 ?
-                    'available in ' + (6 - numGuesses) + ' guess' + (numGuesses !== 5 ? 'es' : '') :
-                    'search by pantheon, class or any other category!'
-                  }
+                  /> :
+                  <img
+                    height={69}
+                    width={80}
+                    alt={""}
+                    src={require('./assets/disadvanced.png')}
+                  /> 
+                }
+                { advanced ? 
+                  <div className="plus">
+                    <img
+                      height={30}
+                      width={30}
+                      alt={""}
+                      src={require('./assets/plus.png')}
+                      onClick={toggleAdvanced}
+                    />
+                  </div> :
+                  <div className="plus"/>
+                }
+                <div className='toolTipText'>
+                  <div className='toolTipTitle'>
+                    Advanced Search
+                  </div>
+                  <div className='toolTipSmall'>
+                    { numGuesses < 5 ?
+                      'available in ' + (5 - numGuesses) + ' guess' + (numGuesses !== 5 ? 'es' : '') :
+                      'search by pantheon, class or any other category!'
+                    }
+                  </div>
                 </div>
               </div>
             </div>
+            { filteredData.length !== 0 && (
+              <div className='dataResult'>
+                {filteredData.map((value, key) => {
+                  return <div key={key} className='godSelector' onClick={() => addGuess(value.gid)}>
+                    <img
+                      height={95}
+                      width={405}
+                      alt={""}
+                      src={require('./assets/icons/'+value.name.toLowerCase().replace(/\s/g, "")+'.png')}
+                    />
+                    <div className='godText'> {value.name} </div>
+                  </div>;
+                })}
+              </div>
+            )}
           </div>
-          { filteredData.length !== 0 && (
-            <div className='dataResult'>
-              {filteredData.map((value, key) => {
-                return <div key={key} className='godSelector' onClick={() => addGuess(value.gid)}>
-                  <img
-                    height={95}
-                    width={405}
-                    alt={""}
-                    src={require('./assets/icons/'+value.name.toLowerCase().replace(/\s/g, "")+'.png')}
-                  />
-                  <div className='godText'> {value.name} </div>
-                </div>;
-              })}
-            </div>
-          )}
-        </div>}
+        }
       </header>
       <div className="Guesses-Table">
         <div className="Table-Titles">
