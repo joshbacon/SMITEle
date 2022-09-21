@@ -1,5 +1,6 @@
 import './App.css';
 import React, { useEffect, useState } from 'react';
+import { useCookies } from 'react-cookie';
 import GodData from './GodData.json';
 
 function App() {
@@ -17,6 +18,8 @@ function App() {
   const [pickedGod, setPickedGod] = useState({});
   // const [advanced, setAdvanced] = useCookies(false);
   const [advanced, setAdvanced] = useState(false);
+
+  const [cookies, setCookie, removeCookie] = useCookies(['gameState']);
 
   // handle filtering when the user searchs
   const handleFilter = (event) => {
