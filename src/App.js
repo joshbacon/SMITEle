@@ -62,6 +62,13 @@ function App() {
       setGameWon(true);
       setCookie('gameWon', gameWon, { path: '/' });
     }
+    console.log('HERE DOWN');
+    console.log(cookies.pickedGod);
+    console.log(cookies.tableData);
+    console.log(cookies.lastGuess);
+    console.log(cookies.numGuesses);
+    console.log(cookies.advanced);
+    console.log(cookies.gameWon);
   }
 
   const newGame = () => {
