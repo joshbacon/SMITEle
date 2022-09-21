@@ -10,16 +10,17 @@ function App() {
   const [tableData, setTableData] = useState([]);
   const [numGuesses, setNumGuesses] = useState(0);
   const [lastGuess, setLastGuess] = useState({});
-  // const [tableData, setTableData] = useCookies([]);
   const [filteredData, setFilteredData] = useState([]);
 
-  // const [gameWon, setGameWon] = useCookies(false);
   const [gameWon, setGameWon] = useState(false);
   const [pickedGod, setPickedGod] = useState({});
-  // const [advanced, setAdvanced] = useCookies(false);
   const [advanced, setAdvanced] = useState(false);
 
   const [cookies, setCookie, removeCookie] = useCookies(['gameState']);
+  /**
+   * cookie structure:
+   * [ pickedGod, lastGuess, tableData, numGuesses, gameWon, advanced ]
+   */
 
   // handle filtering when the user searchs
   const handleFilter = (event) => {
@@ -50,39 +51,55 @@ function App() {
   const addGuess = (gid) => {
     const guess = GodData.find(value => value.gid === gid);
     setNumGuesses(numGuesses+1);
+    setCookie('numGuesses', numGuesses, { path: '/' });
     if (Object.entries(guess).length !== 0 ){
       setFilteredData([]);
       setSearch("");
-      // setTableData(tableData, [guess, ...tableData], {path: "/"});
-      if (Object.entries(lastGuess).length !== 0 ) setTableData([lastGuess, ...tableData]);
+      if (Object.entries(lastGuess).length !== 0 ) {
+        setTableData([lastGuess, ...tableData]);
+        setCookie('tableData', tableData, { path: '/' });
+      }
       setLastGuess(guess);
+      setCookie('lastGuess', lastGuess, { path: '/' });
     }
-    // if (guess === pickedGod) setGameWon(true, {path: "/"});
-    if (guess === pickedGod) setGameWon(true);
+    if (guess === pickedGod) {
+      setGameWon(true);
+      setCookie('gameWon', gameWon, { path: '/' });
+    }
   }
 
   const newGame = () => {
     const index = Math.floor(Math.random() * GodData.length);
     setPickedGod(GodData[index]);
-    // setTableData([], {path: "/"});
+    setCookie('pickedGod', pickedGod, { path: '/' });
     setTableData([]);
+    setCookie('tableData', [], { path: '/' });
     setLastGuess({});
+    setCookie('lastGuess', {}, { path: '/' });
     setNumGuesses(0);
+    setCookie('numGuesses', 0, { path: '/' });
     setSearch("");
-    // setGameWon(gameWon, false, {path: "/"});
     setAdvanced(false);
+    setCookie('advanced', false, { path: '/' });
     setGameWon(false);
+    setCookie('gameWon', false, { path: '/' });
   }
 
   const toggleAdvanced = () => {
-    // setAdvanced(advanced, !advanced, {path: "/"});
     setAdvanced(!advanced);
+    setCookie('advanced', advanced, { path: '/' });
   }
 
   // set the god to be guessed
   useEffect(() => {
+    // if (cookies are empty) do the existing stuff
     const index = Math.floor(Math.random() * GodData.length);
     setPickedGod(GodData[index]);
+    setCookie('pickedGod', pickedGod, { path: '/' });
+
+    // else; pull everything from cookies and pass to local state
+
+    //eslint-disable-next-line
   }, []) // empty array as second argument means this only runs on initial load
 
   // main page to be rendered
