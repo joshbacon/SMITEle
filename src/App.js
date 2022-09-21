@@ -16,11 +16,7 @@ function App() {
   const [pickedGod, setPickedGod] = useState({});
   const [advanced, setAdvanced] = useState(false);
 
-  const [cookies, setCookie, removeCookie] = useCookies(['gameState']);
-  /**
-   * cookie structure:
-   * [ pickedGod, lastGuess, tableData, numGuesses, gameWon, advanced ]
-   */
+  const [cookies, setCookie] = useCookies(['gameState']);
 
   // handle filtering when the user searchs
   const handleFilter = (event) => {
@@ -92,13 +88,51 @@ function App() {
 
   // set the god to be guessed
   useEffect(() => {
-    // if (cookies are empty) do the existing stuff
-    const index = Math.floor(Math.random() * GodData.length);
-    setPickedGod(GodData[index]);
-    setCookie('pickedGod', pickedGod, { path: '/' });
 
-    // else; pull everything from cookies and pass to local state
+    // Just try it I guess lol
+    // try {
+    //   setPickedGod(cookies.pickedGod);
+    //   setLastGuess(cookies.lastGuess);
+    //   setTableData(cookies.tableData);
+    //   setNumGuesses(cookies.numGuesses);
+    //   setAdvanced(cookies.advanced);
+    //   setGameWon(cookies.gameWon);
+    // } catch (e) {
+    //   const index = Math.floor(Math.random() * GodData.length);
+    //   setPickedGod(GodData[index]);
+    //   setCookie('pickedGod', pickedGod, { path: '/' });
+    // }
 
+    // This makes more sense logically I think?
+    if ( cookies.pickedGod.content !== undefined &&
+         cookies.lastGuess.content !== undefined &&
+         cookies.tableData.content !== undefined &&
+         cookies.numGuesses.content !== undefined &&
+         cookies.advanced.content !== undefined &&
+         cookies.gameWon.content !== undefined){
+      setPickedGod(cookies.pickedGod);
+      setLastGuess(cookies.lastGuess);
+      setTableData(cookies.tableData);
+      setNumGuesses(cookies.numGuesses);
+      setAdvanced(cookies.advanced);
+      setGameWon(cookies.gameWon);
+    } else {
+      const index = Math.floor(Math.random() * GodData.length);
+      setPickedGod(GodData[index]);
+      setCookie('pickedGod', pickedGod, { path: '/' });
+      setCookie('tableData', [], { path: '/' });
+      setCookie('lastGuess', {}, { path: '/' });
+      setCookie('numGuesses', 0, { path: '/' });
+      setCookie('advanced', false, { path: '/' });
+      setCookie('gameWon', false, { path: '/' });
+      console.log('HERE DOWN');
+      console.log(cookies.pickedGod);
+      console.log(cookies.tableData);
+      console.log(cookies.lastGuess);
+      console.log(cookies.numGuesses);
+      console.log(cookies.advanced);
+      console.log(cookies.gameWon);
+      }
     //eslint-disable-next-line
   }, []) // empty array as second argument means this only runs on initial load
 
