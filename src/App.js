@@ -218,82 +218,85 @@ function App() {
           )}
         </div>
       }
-      <div className="Guesses-Table">
-        <div className="Table-Titles">
-          <div className="Data-Title">God</div>
-          <div className="Data-Title">Gender</div>
-          <div className="Data-Title">Pantheon</div>
-          <div className="Data-Title">Class</div>
-          <div className="Data-Title">Type</div>
-          <div className="Data-Title">Release<br/>Date</div>
+      <div className="scroll-box">
+        <div className="table-titles">
+          <div className="field-title">God</div>
+          <div className="field-title">Gender</div>
+          <div className="field-title">Pantheon</div>
+          <div className="field-title">Class</div>
+          <div className="field-title">Type</div>
+          <div className="field-title">Release<br/>Date</div>
+        </div>
+        <div className="guesses-table">
+          { Object.entries(lastGuess).length !== 0 && (
+            <div key={lastGuess.gid} className='guess-item'>
+              <div
+                className={lastGuess.name === pickedGod.name ? "square-correct a" : "square-incorrect a"}>
+                {lastGuess.name}
+              </div>
+              <div
+                className={lastGuess.gender === pickedGod.gender ? "square-correct b" : "square-incorrect b"}>
+                {lastGuess.gender}
+              </div>
+              <div
+                className={lastGuess.pantheon === pickedGod.pantheon ? "square-correct c" : "square-incorrect c"}>
+                {lastGuess.pantheon}
+              </div>
+              <div
+                className={lastGuess.class === pickedGod.class ? "square-correct d" : "square-incorrect d"}>
+                {lastGuess.class}
+              </div>
+              <div
+                className={lastGuess.type === pickedGod.type ? "square-correct e" : "square-incorrect e"}>
+                {lastGuess.type}
+              </div>
+              <div
+                className={lastGuess.releaseDate === pickedGod.releaseDate ? "square-correct f" :
+                  lastGuess.releaseDate < pickedGod.releaseDate ? "square-incorrect up f" : "square-incorrect down f"}>
+                {lastGuess.releaseDate}
+              </div>
+            </div>
+          )}
+          { tableData.length !== 0 && (
+            <div className='guess-row'>
+              {[...tableData].map((value, key) => {
+                return <div>
+                  <div key={key} className='guess-item'>
+                    <div
+                      className={value.name === pickedGod.name ? "square-correct" : "square-incorrect"}>
+                      {value.name}
+                    </div>
+                    <div
+                      className={value.gender === pickedGod.gender ? "square-correct" : "square-incorrect"}>
+                      {value.gender}
+                    </div>
+                    <div
+                      className={value.pantheon === pickedGod.pantheon ? "square-correct" : "square-incorrect"}>
+                      {value.pantheon}
+                    </div>
+                    <div
+                      className={value.class === pickedGod.class ? "square-correct" : "square-incorrect"}>
+                      {value.class}
+                    </div>
+                    <div
+                      className={value.type === pickedGod.type ? "square-correct" : "square-incorrect"}>
+                      {value.type}
+                    </div>
+                    <div
+                      className={value.releaseDate === pickedGod.releaseDate ? "square-correct" :
+                        value.releaseDate < pickedGod.releaseDate ? "square-incorrect up" : "square-incorrect down"}>
+                      {value.releaseDate}
+                    </div>
+                  </div>
+                </div>;
+              })}
+            </div>
+          )}
         </div>
       </div>
-      <div className="Guesses-Table">
-        { Object.entries(lastGuess).length !== 0 && (
-          <div key={lastGuess.gid} className='Guess-Items'>
-            <div
-              className={lastGuess.name === pickedGod.name ? "square-correct a" : "square-incorrect a"}>
-              {lastGuess.name}
-            </div>
-            <div
-              className={lastGuess.gender === pickedGod.gender ? "square-correct b" : "square-incorrect b"}>
-              {lastGuess.gender}
-            </div>
-            <div
-              className={lastGuess.pantheon === pickedGod.pantheon ? "square-correct c" : "square-incorrect c"}>
-              {lastGuess.pantheon}
-            </div>
-            <div
-              className={lastGuess.class === pickedGod.class ? "square-correct d" : "square-incorrect d"}>
-              {lastGuess.class}
-            </div>
-            <div
-              className={lastGuess.type === pickedGod.type ? "square-correct e" : "square-incorrect e"}>
-              {lastGuess.type}
-            </div>
-            <div
-              className={lastGuess.releaseDate === pickedGod.releaseDate ? "square-correct f" :
-                lastGuess.releaseDate < pickedGod.releaseDate ? "square-incorrect up f" : "square-incorrect down f"}>
-              {lastGuess.releaseDate}
-            </div>
-          </div>
-        )}
-        { tableData.length !== 0 && (
-          <div className='Guess-Row'>
-            {[...tableData].map((value, key) => {
-              return <div>
-                <div key={key} className='Guess-Items'>
-                  <div
-                    className={value.name === pickedGod.name ? "square-correct" : "square-incorrect"}>
-                    {value.name}
-                  </div>
-                  <div
-                    className={value.gender === pickedGod.gender ? "square-correct" : "square-incorrect"}>
-                    {value.gender}
-                  </div>
-                  <div
-                    className={value.pantheon === pickedGod.pantheon ? "square-correct" : "square-incorrect"}>
-                    {value.pantheon}
-                  </div>
-                  <div
-                    className={value.class === pickedGod.class ? "square-correct" : "square-incorrect"}>
-                    {value.class}
-                  </div>
-                  <div
-                    className={value.type === pickedGod.type ? "square-correct" : "square-incorrect"}>
-                    {value.type}
-                  </div>
-                  <div
-                    className={value.releaseDate === pickedGod.releaseDate ? "square-correct" :
-                      value.releaseDate < pickedGod.releaseDate ? "square-incorrect up" : "square-incorrect down"}>
-                    {value.releaseDate}
-                  </div>
-                </div>
-              </div>;
-            })}
-          </div>
-        )}
-      </div>
+      <footer>
+        <h1>by Josh Bacon</h1>
+      </footer>
     </div>
   );
 }

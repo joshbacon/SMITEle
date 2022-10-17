@@ -10,16 +10,24 @@
   font-family: mainFont;
 }
 
-body::-webkit-scrollbar {
+body::-webkit-scrollbar,
+.scroll-box::-webkit-scrollbar {
   width: 15px;
 }
 
-body::-webkit-scrollbar-track {
-  background: #282c34;
+body::-webkit-scrollbar-track,
+.scroll-box::-webkit-scrollbar-track {
+  background: #282c3400;
 }
 
-body::-webkit-scrollbar-thumb {
+body::-webkit-scrollbar-thumb,
+.scroll-box::-webkit-scrollbar-thumb {
   background-color: #B48521;
+}
+
+body::-webkit-scrollbar-corner,
+.scroll-box::-webkit-scrollbar-corner {
+  background: #282c3400;
 }
 
 .App {
@@ -28,6 +36,7 @@ body::-webkit-scrollbar-thumb {
   flex-direction: column;
   width: 100vw;
   height: 100vh;
+  overflow: hidden;
 
   color: #B48521;
   text-align: center;
@@ -49,7 +58,7 @@ body::-webkit-scrollbar-thumb {
 .logo img {
   position: absolute;
   top: 5px;
-  left: 15px;
+  left: 25px;
   width: 15%;
 }
   
@@ -61,11 +70,18 @@ body::-webkit-scrollbar-thumb {
 
 .title {
   vertical-align: middle;
-  padding: 5% 0;
+  padding: 5% 0 2.5% 0;
 }
 
 .title h1 {
   font-size: 3rem;
+}
+
+@media screen and (max-width: 625px) {
+  .title h1 {
+    font-size: 2rem;
+    padding-top: 5%;
+  }
 }
 
 .title h2 {
@@ -89,7 +105,7 @@ body::-webkit-scrollbar-thumb {
   font-size: 20px;
   padding: 15px;
   height: 40px;
-  width: 370px;
+  width: 325px;
   border-radius: 0.25em;
 }
 
@@ -99,7 +115,11 @@ body::-webkit-scrollbar-thumb {
 }
 
 .tool-tip {
+  position: relative;
   padding-left: 2rem;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
 }
 
 .as-button {
@@ -107,8 +127,7 @@ body::-webkit-scrollbar-thumb {
 }
 
 .advanced-icon {
-  position: relative;
-  height: 10%;
+  height: 80%;
 }
 
 .active {
@@ -151,7 +170,7 @@ body::-webkit-scrollbar-thumb {
 
   position: absolute;
   top: 0;
-  left: 105%;
+  left: 110%;
   z-index: 1;
 }
 
@@ -171,11 +190,50 @@ body::-webkit-scrollbar-thumb {
   padding-bottom: 8px;
 }
 
+.scroll-box {
+  overflow: scroll;
+  width: 100%;
+}
 
+.table-titles {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  /* column-gap: 5%; */
+  width: 60%;
+  margin: 0 auto;
+  margin-top: 2rem;
 
+  border-radius: 25px;
+}
 
+@media screen and (max-width: 1350px) {
+  .table-titles {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
 
+.field-title {
+  font-size: 1.8rem;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  background-color: #282C34; /*opacity was A4*/
+  border-radius: 25px;
+  padding: 0 2rem;
+}
 
+.guesses-table {
+  display: grid;
+  width: 60%;
+  margin: 0 auto;
+}
+
+.guess-item {
+  display: flex;
+  flex-direction: row;
+}
 
 
 
@@ -463,4 +521,18 @@ body::-webkit-scrollbar-thumb {
   text-decoration-color: #B48521;
   color: #bb974a;
   cursor: pointer;
+}
+
+
+
+
+
+
+
+
+footer {
+  position: absolute;
+  bottom: 0;
+  left: 5px;
+  font-size: 0.5rem;
 }
