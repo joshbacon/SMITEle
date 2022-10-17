@@ -18,7 +18,7 @@ function App() {
 
   const [cookies, setCookie] = useCookies(['gameState']);
 
-  // handle filtering when the user searchs
+  // Handle filtering when the user searchs
   const handleFilter = (event) => {
     const searchWord = event.target.value;
     setSearch(searchWord);
@@ -43,7 +43,7 @@ function App() {
     }
   }
 
-  // handle adding a guess to the tableData state array
+  // Handle adding a guess to the tableData state array
   const addGuess = (gid) => {
     const guess = GodData.find(value => value.gid === gid);
     setNumGuesses(numGuesses+1);
@@ -71,6 +71,7 @@ function App() {
     console.log(cookies.gameWon);
   }
 
+  // Reset values for a new game
   const newGame = () => {
     const index = Math.floor(Math.random() * GodData.length);
     setPickedGod(GodData[index]);
@@ -96,34 +97,20 @@ function App() {
   // set the god to be guessed
   useEffect(() => {
 
-    // Just try it I guess lol
-    // try {
+    // Grab cookie data if available
+    // if ( cookies.pickedGod.content !== undefined &&
+    //      cookies.lastGuess.content !== undefined &&
+    //      cookies.tableData.content !== undefined &&
+    //      cookies.numGuesses.content !== undefined &&
+    //      cookies.advanced.content !== undefined &&
+    //      cookies.gameWon.content !== undefined){
     //   setPickedGod(cookies.pickedGod);
     //   setLastGuess(cookies.lastGuess);
     //   setTableData(cookies.tableData);
     //   setNumGuesses(cookies.numGuesses);
     //   setAdvanced(cookies.advanced);
     //   setGameWon(cookies.gameWon);
-    // } catch (e) {
-    //   const index = Math.floor(Math.random() * GodData.length);
-    //   setPickedGod(GodData[index]);
-    //   setCookie('pickedGod', pickedGod, { path: '/' });
-    // }
-
-    // This makes more sense logically I think?
-    if ( cookies.pickedGod.content !== undefined &&
-         cookies.lastGuess.content !== undefined &&
-         cookies.tableData.content !== undefined &&
-         cookies.numGuesses.content !== undefined &&
-         cookies.advanced.content !== undefined &&
-         cookies.gameWon.content !== undefined){
-      setPickedGod(cookies.pickedGod);
-      setLastGuess(cookies.lastGuess);
-      setTableData(cookies.tableData);
-      setNumGuesses(cookies.numGuesses);
-      setAdvanced(cookies.advanced);
-      setGameWon(cookies.gameWon);
-    } else {
+    // } else { // Else; set default values
       const index = Math.floor(Math.random() * GodData.length);
       setPickedGod(GodData[index]);
       setCookie('pickedGod', pickedGod, { path: '/' });
@@ -139,100 +126,98 @@ function App() {
       console.log(cookies.numGuesses);
       console.log(cookies.advanced);
       console.log(cookies.gameWon);
-      }
+    // }
     //eslint-disable-next-line
   }, []) // empty array as second argument means this only runs on initial load
 
-  // main page to be rendered
+  // Main page to be rendered
   return (
     <div className="App">
-      <header className="App-header">
-        <img 
-          src={require('./assets/logo.png')}
-          alt={"SMITE"}
-          height={199}
-          width={399}
-        />
-        <h1>
-          Welcome to SMITEle!<br/>
-          {gameWon ? 'You can guess the God!' : 'Can you guess the God?'}
-        </h1>
+      <header>
+        <div className="logo">
+          <img
+            src={require('./assets/logo.png')}
+            alt={"SMITE"}
+          />
+        </div>
+        <div className="title">
+          <h1>
+            Welcome to SMITEle!<br/>
+            {gameWon ? 'You can guess the God!' : 'Can you guess the God?'}
+          </h1>
+        </div>
         <h2> {gameWon ? '...in '+numGuesses+' guesses.' : ''} </h2>
-        { gameWon ?
-          <div className="winCard">
-            <img
-              height={500}
-              width={350}
-              alt={""}
-              src={require('./assets/cards/'+pickedGod.name.toLowerCase().replace(/\s/g, "")+'.png')}
-            />
-            <div className="replay" onClick={newGame}>Play Again</div>
-          </div> :
-          <div className='search'>
-            <div className='searchRow'>
-              <div className='searchInputs'>
-                <input type='text' placeholder={"Type a Gods name..."} value={search} onChange={handleFilter}/>
-              </div>
-              <div className='toolTip'>
-                { numGuesses >= 5 ?
+      </header>
+      { gameWon ?
+        <div className="win-state">
+          <img
+            alt={pickedGod.name}
+            src={require('./assets/cards/'+pickedGod.name.toLowerCase().replace(/\s/g, "")+'.png')}
+          />
+          <div className="replay" onClick={newGame}>Play Again</div>
+        </div> :
+        <div className='search-bar'>
+          <input
+            className='search-input'
+            type='text'
+            placeholder={"Type a Gods name..."}
+            value={search}
+            onChange={handleFilter}
+          />
+          <div className="tool-tip">
+            <div className="as-button">
+              { numGuesses >= 5 ?
+                <img
+                  className={"advanced-icon active"}
+                  alt={"advanced search: enabled"}
+                  src={require('./assets/advanced.png')}
+                  onClick={toggleAdvanced}
+                /> :
+                <img
+                  className={"advanced-icon"}
+                  alt={"advanced search: disabled"}
+                  src={require('./assets/disadvanced.png')}
+                /> 
+              }
+              <div className="">
+                { advanced ?
                   <img
-                    className={"advanced-active"}
-                    height={69}
-                    width={80}
-                    alt={""}
-                    src={require('./assets/advanced.png')}
+                    className="as-indicator"
+                    alt={"active"}
+                    src={require('./assets/plus.png')}
                     onClick={toggleAdvanced}
                   /> :
-                  <img
-                    height={69}
-                    width={80}
-                    alt={""}
-                    src={require('./assets/disadvanced.png')}
-                  /> 
+                  <div/>
                 }
-                { advanced ? 
-                  <div className="plus">
-                    <img
-                      height={30}
-                      width={30}
-                      alt={""}
-                      src={require('./assets/plus.png')}
-                      onClick={toggleAdvanced}
-                    />
-                  </div> :
-                  <div className="plus"/>
-                }
-                <div className='toolTipText'>
-                  <div className='toolTipTitle'>
-                    Advanced Search
-                  </div>
-                  <div className='toolTipSmall'>
-                    { numGuesses < 5 ?
-                      'available in ' + (5 - numGuesses) + ' guess' + (numGuesses !== 5 ? 'es' : '') :
-                      'search by pantheon, class or any other category!'
-                    }
-                  </div>
-                </div>
               </div>
             </div>
-            { filteredData.length !== 0 && (
-              <div className='dataResult'>
-                {filteredData.map((value, key) => {
-                  return <div key={key} className='godSelector' onClick={() => addGuess(value.gid)}>
-                    <img
-                      height={95}
-                      width={405}
-                      alt={""}
-                      src={require('./assets/icons/'+value.name.toLowerCase().replace(/\s/g, "")+'.png')}
-                    />
-                    <div className='godText'> {value.name} </div>
-                  </div>;
-                })}
+            <div className='tip-text'>
+              <div className='tip-title'>
+                Advanced Search
               </div>
-            )}
+              <div className='tip-info'>
+                { numGuesses < 5 ?
+                  'available in ' + (5 - numGuesses) + ' guess' + (numGuesses !== 5 ? 'es' : '') :
+                  'search by pantheon, class or any other category!'
+                }
+              </div>
+            </div>
           </div>
-        }
-      </header>
+          { filteredData.length !== 0 && (
+            <div className='dataResult'>
+              {filteredData.map((value, key) => {
+                return <div key={key} className='godSelector' onClick={() => addGuess(value.gid)}>
+                  <img
+                    alt={""}
+                    src={require('./assets/icons/'+value.name.toLowerCase().replace(/\s/g, "")+'.png')}
+                  />
+                  <div className='godText'> {value.name} </div>
+                </div>;
+              })}
+            </div>
+          )}
+        </div>
+      }
       <div className="Guesses-Table">
         <div className="Table-Titles">
           <div className="Data-Title">God</div>
@@ -240,7 +225,7 @@ function App() {
           <div className="Data-Title">Pantheon</div>
           <div className="Data-Title">Class</div>
           <div className="Data-Title">Type</div>
-          <div className="Data-Title">Release Date</div>
+          <div className="Data-Title">Release<br/>Date</div>
         </div>
       </div>
       <div className="Guesses-Table">
