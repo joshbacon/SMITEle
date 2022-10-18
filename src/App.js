@@ -156,39 +156,33 @@ function App() {
           />
           <div className="replay" onClick={newGame}>Play Again</div>
         </div> :
-        <div className='search-bar'>
+        <><div className='search-bar'>
           <input
             className='search-input'
             type='text'
             placeholder={"Type a Gods name..."}
             value={search}
-            onChange={handleFilter}
-          />
+            onChange={handleFilter} />
           <div className="tool-tip">
             <div className="as-button">
-              { numGuesses >= 5 ?
+              {numGuesses >= 5 ?
                 <img
                   className={"advanced-icon active"}
                   alt={"advanced search: enabled"}
                   src={require('./assets/advanced.png')}
-                  onClick={toggleAdvanced}
-                /> :
+                  onClick={toggleAdvanced} /> :
                 <img
                   className={"advanced-icon"}
                   alt={"advanced search: disabled"}
-                  src={require('./assets/disadvanced.png')}
-                /> 
-              }
+                  src={require('./assets/disadvanced.png')} />}
               <div className="">
-                { advanced ?
+                {advanced ?
                   <img
                     className="as-indicator"
                     alt={"active"}
                     src={require('./assets/plus.png')}
-                    onClick={toggleAdvanced}
-                  /> :
-                  <div/>
-                }
+                    onClick={toggleAdvanced} /> :
+                  <div />}
               </div>
             </div>
             <div className='tip-text'>
@@ -196,104 +190,99 @@ function App() {
                 Advanced Search
               </div>
               <div className='tip-info'>
-                { numGuesses < 5 ?
+                {numGuesses < 5 ?
                   'available in ' + (5 - numGuesses) + ' guess' + (numGuesses !== 5 ? 'es' : '') :
-                  'search by pantheon, class or any other category!'
-                }
+                  'search by pantheon, class or any other category!'}
               </div>
             </div>
           </div>
-          { filteredData.length !== 0 && (
-            <div className='dataResult'>
+          {filteredData.length !== 0 && (
+            <div className='search-results'>
               {filteredData.map((value, key) => {
-                return <div key={key} className='godSelector' onClick={() => addGuess(value.gid)}>
+                return <div key={key} className='god-selector' onClick={() => addGuess(value.gid)}>
                   <img
                     alt={""}
-                    src={require('./assets/icons/'+value.name.toLowerCase().replace(/\s/g, "")+'.png')}
-                  />
-                  <div className='godText'> {value.name} </div>
+                    src={require('./assets/icons/' + value.name.toLowerCase().replace(/\s/g, "") + '.png')} />
+                  <div className='god-text'> {value.name} </div>
                 </div>;
               })}
             </div>
           )}
-        </div>
-      }
-      <div className="scroll-box">
-        <div className="table-titles">
-          <div className="field-title">God</div>
-          <div className="field-title">Gender</div>
-          <div className="field-title">Pantheon</div>
-          <div className="field-title">Class</div>
-          <div className="field-title">Type</div>
-          <div className="field-title">Release<br/>Date</div>
-        </div>
-        <div className="guesses-table">
-          { Object.entries(lastGuess).length !== 0 && (
-            <div key={lastGuess.gid} className='guess-item'>
-              <div
-                className={lastGuess.name === pickedGod.name ? "square-correct a" : "square-incorrect a"}>
-                {lastGuess.name}
-              </div>
-              <div
-                className={lastGuess.gender === pickedGod.gender ? "square-correct b" : "square-incorrect b"}>
-                {lastGuess.gender}
-              </div>
-              <div
-                className={lastGuess.pantheon === pickedGod.pantheon ? "square-correct c" : "square-incorrect c"}>
-                {lastGuess.pantheon}
-              </div>
-              <div
-                className={lastGuess.class === pickedGod.class ? "square-correct d" : "square-incorrect d"}>
-                {lastGuess.class}
-              </div>
-              <div
-                className={lastGuess.type === pickedGod.type ? "square-correct e" : "square-incorrect e"}>
-                {lastGuess.type}
-              </div>
-              <div
-                className={lastGuess.releaseDate === pickedGod.releaseDate ? "square-correct f" :
-                  lastGuess.releaseDate < pickedGod.releaseDate ? "square-incorrect up f" : "square-incorrect down f"}>
-                {lastGuess.releaseDate}
-              </div>
+        </div><div className="scroll-box">
+            <div className="table-titles">
+              <div className="field-title">God</div>
+              <div className="field-title">Gender</div>
+              <div className="field-title">Pantheon</div>
+              <div className="field-title">Class</div>
+              <div className="field-title">Type</div>
+              <div className="field-title">Release Date</div>
             </div>
-          )}
-          { tableData.length !== 0 && (
-            <div className='guess-row'>
-              {[...tableData].map((value, key) => {
-                return <div>
-                  <div key={key} className='guess-item'>
-                    <div
-                      className={value.name === pickedGod.name ? "square-correct" : "square-incorrect"}>
-                      {value.name}
-                    </div>
-                    <div
-                      className={value.gender === pickedGod.gender ? "square-correct" : "square-incorrect"}>
-                      {value.gender}
-                    </div>
-                    <div
-                      className={value.pantheon === pickedGod.pantheon ? "square-correct" : "square-incorrect"}>
-                      {value.pantheon}
-                    </div>
-                    <div
-                      className={value.class === pickedGod.class ? "square-correct" : "square-incorrect"}>
-                      {value.class}
-                    </div>
-                    <div
-                      className={value.type === pickedGod.type ? "square-correct" : "square-incorrect"}>
-                      {value.type}
-                    </div>
-                    <div
-                      className={value.releaseDate === pickedGod.releaseDate ? "square-correct" :
-                        value.releaseDate < pickedGod.releaseDate ? "square-incorrect up" : "square-incorrect down"}>
-                      {value.releaseDate}
-                    </div>
+            <div className="guesses-table">
+              {Object.entries(lastGuess).length !== 0 && (
+                <div key={lastGuess.gid} className='guess-item'>
+                  <div
+                    className={lastGuess.name === pickedGod.name ? "square correct a" : "square incorrect a"}>
+                    {lastGuess.name}
                   </div>
-                </div>;
-              })}
+                  <div
+                    className={lastGuess.gender === pickedGod.gender ? "square correct b" : "square incorrect b"}>
+                    {lastGuess.gender}
+                  </div>
+                  <div
+                    className={lastGuess.pantheon === pickedGod.pantheon ? "square correct c" : "square incorrect c"}>
+                    {lastGuess.pantheon}
+                  </div>
+                  <div
+                    className={lastGuess.class === pickedGod.class ? "square correct d" : "square incorrect d"}>
+                    {lastGuess.class}
+                  </div>
+                  <div
+                    className={lastGuess.type === pickedGod.type ? "square correct e" : "square incorrect e"}>
+                    {lastGuess.type}
+                  </div>
+                  <div
+                    className={lastGuess.releaseDate === pickedGod.releaseDate ? "square correct f" :
+                      lastGuess.releaseDate < pickedGod.releaseDate ? "square incorrect up f" : "square incorrect down f"}>
+                    {lastGuess.releaseDate}
+                  </div>
+                </div>
+              )}
+              {tableData.length !== 0 && (
+                <div className='guess-row'>
+                  {[...tableData].map((value, key) => {
+                    return <div key={key} className='guess-item'>
+                      <div
+                        className={value.name === pickedGod.name ? "square correct" : "square incorrect"}>
+                        {value.name}
+                      </div>
+                      <div
+                        className={value.gender === pickedGod.gender ? "square correct" : "square incorrect"}>
+                        {value.gender}
+                      </div>
+                      <div
+                        className={value.pantheon === pickedGod.pantheon ? "square correct" : "square incorrect"}>
+                        {value.pantheon}
+                      </div>
+                      <div
+                        className={value.class === pickedGod.class ? "square correct" : "square incorrect"}>
+                        {value.class}
+                      </div>
+                      <div
+                        className={value.type === pickedGod.type ? "square correct" : "square incorrect"}>
+                        {value.type}
+                      </div>
+                      <div
+                        className={value.releaseDate === pickedGod.releaseDate ? "square correct" :
+                          value.releaseDate < pickedGod.releaseDate ? "square incorrect up" : "square incorrect down"}>
+                        {value.releaseDate}
+                      </div>
+                    </div>;
+                  })}
+                </div>
+              )}
             </div>
-          )}
-        </div>
-      </div>
+          </div></>
+      }
       <footer>
         <h1>by Josh Bacon</h1>
       </footer>
