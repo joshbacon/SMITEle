@@ -1,6 +1,5 @@
 import './App.css';
 import React, { useEffect, useState } from 'react';
-import { useCookies } from 'react-cookie';
 import GodData from './GodData.json';
 
 function App() {
@@ -15,8 +14,6 @@ function App() {
   const [gameWon, setGameWon] = useState(false);
   const [pickedGod, setPickedGod] = useState({});
   const [advanced, setAdvanced] = useState(false);
-
-  const [cookies, setCookie] = useCookies(['gameState']);
 
   // Handle filtering when the user searchs
   const handleFilter = (event) => {
@@ -46,87 +43,77 @@ function App() {
   // Handle adding a guess to the tableData state array
   const addGuess = (gid) => {
     const guess = GodData.find(value => value.gid === gid);
+    localStorage.setItem('numGuesses', (numGuesses+1).toString());
     setNumGuesses(numGuesses+1);
-    setCookie('numGuesses', numGuesses, { path: '/' });
     if (Object.entries(guess).length !== 0 ){
       setFilteredData([]);
       setSearch("");
       if (Object.entries(lastGuess).length !== 0 ) {
+        localStorage.setItem('tableData', JSON.stringify([lastGuess, ...tableData]))
         setTableData([lastGuess, ...tableData]);
-        setCookie('tableData', tableData, { path: '/' });
       }
       setLastGuess(guess);
-      setCookie('lastGuess', lastGuess, { path: '/' });
+      localStorage.setItem('lastGuess', JSON.stringify(guess));
     }
     if (guess === pickedGod) {
       setGameWon(true);
-      setCookie('gameWon', gameWon, { path: '/' });
+      localStorage.clear();
     }
-    console.log('HERE DOWN');
-    console.log(cookies.pickedGod);
-    console.log(cookies.tableData);
-    console.log(cookies.lastGuess);
-    console.log(cookies.numGuesses);
-    console.log(cookies.advanced);
-    console.log(cookies.gameWon);
   }
 
   // Reset values for a new game
   const newGame = () => {
     const index = Math.floor(Math.random() * GodData.length);
     setPickedGod(GodData[index]);
-    setCookie('pickedGod', pickedGod, { path: '/' });
+    localStorage.setItem('pickedGod', JSON.stringify(GodData[index]));
     setTableData([]);
-    setCookie('tableData', [], { path: '/' });
     setLastGuess({});
-    setCookie('lastGuess', {}, { path: '/' });
     setNumGuesses(0);
-    setCookie('numGuesses', 0, { path: '/' });
     setSearch("");
     setAdvanced(false);
-    setCookie('advanced', false, { path: '/' });
     setGameWon(false);
-    setCookie('gameWon', false, { path: '/' });
+
+    // LocalStorage is cleared on correct guess
+    //localStorage.clear();
   }
 
   const toggleAdvanced = () => {
     setAdvanced(!advanced);
-    setCookie('advanced', advanced, { path: '/' });
+    localStorage.setItem('advanced', (!advanced).toString());
   }
 
-  // set the god to be guessed
+  // Setup variables on-load
   useEffect(() => {
 
-    // Grab cookie data if available
-    // if ( cookies.pickedGod.content !== undefined &&
-    //      cookies.lastGuess.content !== undefined &&
-    //      cookies.tableData.content !== undefined &&
-    //      cookies.numGuesses.content !== undefined &&
-    //      cookies.advanced.content !== undefined &&
-    //      cookies.gameWon.content !== undefined){
-    //   setPickedGod(cookies.pickedGod);
-    //   setLastGuess(cookies.lastGuess);
-    //   setTableData(cookies.tableData);
-    //   setNumGuesses(cookies.numGuesses);
-    //   setAdvanced(cookies.advanced);
-    //   setGameWon(cookies.gameWon);
-    // } else { // Else; set default values
+    let LSpicked = localStorage.getItem('pickedGod');
+    let LStableData = localStorage.getItem('tableData');
+    let LSlastGuess = localStorage.getItem('lastGuess');
+    let LSnumGuesses = localStorage.getItem('numGuesses');
+    let LSadvanced = localStorage.getItem('advanced');
+
+    if (LSpicked) {
+      setPickedGod(JSON.parse(LSpicked));
+    } else {
+      // Pick new god to be guessed
       const index = Math.floor(Math.random() * GodData.length);
       setPickedGod(GodData[index]);
-      setCookie('pickedGod', pickedGod, { path: '/' });
-      setCookie('tableData', [], { path: '/' });
-      setCookie('lastGuess', {}, { path: '/' });
-      setCookie('numGuesses', 0, { path: '/' });
-      setCookie('advanced', false, { path: '/' });
-      setCookie('gameWon', false, { path: '/' });
-      console.log('HERE DOWN');
-      console.log(cookies.pickedGod);
-      console.log(cookies.tableData);
-      console.log(cookies.lastGuess);
-      console.log(cookies.numGuesses);
-      console.log(cookies.advanced);
-      console.log(cookies.gameWon);
-    // }
+      localStorage.setItem('pickedGod', JSON.stringify(GodData[index]));
+    }
+    // Other state variables are initialized to empty state, so no else
+    if (LStableData) {
+      setTableData(JSON.parse(LStableData));
+    }
+    if (LSlastGuess) {
+      setLastGuess(JSON.parse(LSlastGuess));
+    }
+    if (LSnumGuesses) {
+      setNumGuesses(parseInt(LSnumGuesses, 10));
+    }
+    if (LSadvanced) {
+      setAdvanced(LSadvanced === 'true' ? true : false);
+    }
+
+    // could fix properly but it doesn't really matter for this project
     //eslint-disable-next-line
   }, []) // empty array as second argument means this only runs on initial load
 
@@ -208,7 +195,9 @@ function App() {
               })}
             </div>
           )}
-        </div><div className="scroll-box">
+        </div>
+        <div className="container">
+          <div className="scroll-box">
             <div className="table-titles">
               <div className="field-title">God</div>
               <div className="field-title">Gender</div>
@@ -281,7 +270,8 @@ function App() {
                 </div>
               )}
             </div>
-          </div></>
+          </div>
+        </div></>
       }
       <footer>
         <h1>by Josh Bacon</h1>
