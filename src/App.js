@@ -73,7 +73,7 @@ function App() {
     setAdvanced(false);
     setGameWon(false);
 
-    // LocalStorage is cleared on correct guess
+    // LocalStorage is cleared on correct guess, so unecessary here
     //localStorage.clear();
   }
 
