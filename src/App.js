@@ -55,7 +55,8 @@ function App() {
       setLastGuess(guess);
       localStorage.setItem('lastGuess', JSON.stringify(guess));
     }
-    if (guess === pickedGod) {
+    if (gid === pickedGod.gid) {
+      console.log(gid === pickedGod.gid);
       setGameWon(true);
       localStorage.clear();
     }
@@ -273,9 +274,6 @@ function App() {
           </div>
         </div></>
       }
-      <footer>
-        <h1>by Josh Bacon</h1>
-      </footer>
     </div>
   );
 }
