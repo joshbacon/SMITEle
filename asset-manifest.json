@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/SMITEle/static/css/main.8489732c.css",
+    "main.css": "/SMITEle/static/css/main.401d1689.css",
     "main.js": "/SMITEle/static/js/main.afe5e6cb.js",
     "static/media/background.png": "/SMITEle/static/media/background.bf4c36cb533ff58379b4.png",
     "static/media/logo.png": "/SMITEle/static/media/logo.ba00e4d689d86117983b.png",
@@ -131,11 +131,11 @@
     "static/media/Cinzel-Bold.ttf": "/SMITEle/static/media/Cinzel-Bold.d69269caa22057e177db.ttf",
     "static/media/disadvanced.png": "/SMITEle/static/media/disadvanced.fe4b9cd1e8636955ced8.png",
     "index.html": "/SMITEle/index.html",
-    "main.8489732c.css.map": "/SMITEle/static/css/main.8489732c.css.map",
+    "main.401d1689.css.map": "/SMITEle/static/css/main.401d1689.css.map",
     "main.afe5e6cb.js.map": "/SMITEle/static/js/main.afe5e6cb.js.map"
   },
   "entrypoints": [
-    "static/css/main.8489732c.css",
+    "static/css/main.401d1689.css",
     "static/js/main.afe5e6cb.js"
   ]
 }
